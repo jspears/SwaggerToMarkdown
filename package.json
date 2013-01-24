@@ -1,12 +1,8 @@
 {
   "name": "swagger-to-markdown",
-  "preferGlobal": false,
   "version": "0.2.0",
   "author": "jspears <speajus@gmail.com>",
   "description": "convert swagger to markdown",
-  "bin": {
-    "main": "./main.js"
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jspears/swagger-to-markdown.git"
