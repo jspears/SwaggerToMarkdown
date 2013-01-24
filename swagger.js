@@ -37,7 +37,7 @@ function SwaggerToMarkdown() {
             f.$write(self.$build_markdown_header(
                 $titlelize(self.$extract_resource_name(resource.path)+'resource'), 2
             ))
-            f.$write(self.$build_markdown_header(self.$extract_resource_name(path, 2)));
+            f.$write(self.$build_markdown_header(self.$extract_resource_name(path), 2));
             f.$write(resource.description+"\n\n");
             (Array.isArray(specifications) ? specifications : [specifications]).forEach(function(spec){
 
@@ -103,13 +103,14 @@ function SwaggerToMarkdown() {
                 break;
             case 'POST':
             {
-                data = this.parameters[resource.toUpperCase() + ".POST"];
+
+                data = resource ? "" : this.parameters[resource.toUpperCase() + ".POST"];
                 command = "curl -X POST -H \"Content-Type:application/json\" -d '" + data + "' " + base_path + path;
                 break;
             }
             case 'PUT':
             {
-                data = this.parameters[resource.toUpperCase() + ".PUT"];
+                data = resource ? "" : this.parameters[resource.toUpperCase() + ".PUT"];
                 command = "curl -X PUT -H \"Content-Type:application/json\" -d '" + data + "' " + base_path + path;
 
             }
@@ -137,13 +138,10 @@ function SwaggerToMarkdown() {
         }
 
         arguments.filter(function (argument) {
-            return !!argument.name
-        }).filter(function (argument) {
-                return !!self.parameters[argument.name]
-            }).map(function (argument) {
-
+            return argument.name && argument.paramType == 'path' && self.parameters && self.parameters[argument.name]
+        }).map(function (argument) {
                 return path = path.replace("{" + argument.name + "}", self.parameters[argument.name])
-            });
+         });
         return path;
     };
 
